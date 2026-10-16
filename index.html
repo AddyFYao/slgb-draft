@@ -1,0 +1,723 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SLGB Draft 2026/27</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courgette&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<style>
+/* Layout: the SLGB logo as masthead (thick barber-stripe band, script wordmark set right), tabbed content column of navy-outlined cards */
+:root {
+  --paper: #F7F7F3;
+  --card: #FFFFFF;
+  --sunk: #EFEFEA;
+  --ink: #141833;
+  --muted: #5C6079;
+  --line: #DCDDE5;
+  --red: #C8102E;
+  --blue: #1D3C9C;
+  --edge: #141833;
+  --red-soft: #FBE6EA;
+  --blue-soft: #E5EBFA;
+  --stripe-red: #C8102E;
+  --stripe-blue: #1D3C9C;
+  --stripe-white: #FFFFFF;
+  --f-display: "Courgette", "Lucida Calligraphy", "Monotype Corsiva", cursive;
+  --f-body: "Barlow", "Segoe UI", system-ui, sans-serif;
+  --f-label: "Barlow Condensed", "Arial Narrow", "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0D1024; --card: #161A35; --sunk: #1D2242; --ink: #EEF0F8; --muted: #A2A7C2; --line: #2A3055;
+    --red: #F0566C; --blue: #86A2FF; --edge: #3A4275; --red-soft: #3B1624; --blue-soft: #1B2658;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0D1024; --card: #161A35; --sunk: #1D2242; --ink: #EEF0F8; --muted: #A2A7C2; --line: #2A3055;
+  --red: #F0566C; --blue: #86A2FF; --edge: #3A4275; --red-soft: #3B1624; --blue-soft: #1B2658;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.5; }
+table { font-size: inherit; }
+/* Stripes slope like the logo's: red, white, blue, white, steep and leaning right-to-left from the top. */
+.stripe { height: 14px; background: repeating-linear-gradient(62deg, var(--stripe-red) 0 13px, var(--stripe-white) 13px 24px, var(--stripe-blue) 24px 37px, var(--stripe-white) 37px 48px); }
+.stripe.band { height: clamp(40px, 6.4vw, 66px); background: repeating-linear-gradient(62deg, var(--stripe-red) 0 19px, var(--stripe-white) 19px 35px, var(--stripe-blue) 35px 54px, var(--stripe-white) 54px 70px); }
+.wrap { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+header.mast { padding-block: 6px 4px; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 6px 20px; }
+.mast-meta { display: grid; gap: 6px; justify-items: start; padding-bottom: 14px; }
+.eyebrow { display: inline-block; background: var(--edge); color: #FFFFFF; font-family: var(--f-label); font-weight: 700; letter-spacing: .14em; text-transform: uppercase; font-size: 12px; padding: 3px 12px; border-radius: 999px; }
+h1.logo { font-family: var(--f-display); font-weight: 400; font-style: normal; font-size: clamp(56px, 10vw, 104px); line-height: 1.05; margin: 0 0 0 auto; color: var(--ink); letter-spacing: .02em; }
+.sub { color: var(--muted); font-family: var(--f-label); font-weight: 600; letter-spacing: .08em; text-transform: uppercase; font-size: 14px; margin: 0; }
+
+html { -webkit-text-size-adjust: 100%; }
+nav.tabs { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; padding-block: 14px; margin-block: 8px 12px; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); }
+.tab { font: 700 15px/1 var(--f-label); letter-spacing: .06em; text-transform: uppercase; padding: 12px 18px; border-radius: 999px; border: 2px solid var(--edge); background: var(--card); color: var(--ink); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; -webkit-tap-highlight-color: transparent; }
+.tab .short { display: none; }
+.panel, .board { scroll-margin-top: 90px; }
+.panel-title { font: 400 clamp(32px, 7vw, 46px)/1.1 var(--f-display); text-align: center; margin: 12px 0 0; padding-top: 18px; border-top: 2px solid var(--line); }
+#gameweeks > .panel-title { border-top: 0; padding-top: 0; }
+.js .panel-title { display: none; }
+.tab:hover { background: var(--sunk); }
+.tab[aria-selected="true"] { background: var(--red); border-color: var(--red); color: #FFFFFF; box-shadow: 0 3px 0 var(--edge); }
+.tab:focus-visible, .chip-btn:focus-visible, .month:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+
+main { padding-block: 0 48px; display: grid; gap: 28px; }
+section.panel { display: grid; gap: 22px; min-width: 0; }
+h2.sec { font-family: var(--f-label); font-weight: 700; text-transform: uppercase; letter-spacing: .14em; font-size: 14px; color: var(--muted); text-align: center; margin: 0; }
+h3 { margin: 0; }
+.lede { max-width: 66ch; margin: 0 auto; text-align: center; color: var(--muted); text-wrap: balance; }
+
+.tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.tile { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; min-width: 0; }
+.tile .k { font: 600 12px/1.2 var(--f-label); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.tile .v { font: 700 30px/1.1 var(--f-label); font-variant-numeric: tabular-nums; margin-top: 6px; }
+.tile .n { font-weight: 600; } .tile .m { color: var(--muted); font-size: 13px; }
+
+.board { background: var(--card); border: 2px solid var(--edge); border-radius: 14px; overflow: hidden; min-width: 0; }
+.board > .stripe { height: 8px; }
+.board-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; padding: 14px 16px 10px; }
+.board-head h3 { font: 700 15px/1.2 var(--f-label); letter-spacing: .12em; text-transform: uppercase; color: var(--blue); }
+.board-head .note { color: var(--muted); font-size: 13px; }
+.scroll { overflow-x: auto; }
+table.grid { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+table.grid th, table.grid td { padding: 8px 10px; text-align: right; white-space: nowrap; border-top: 1px solid var(--line); }
+table.grid thead th { font: 600 12px/1.2 var(--f-label); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); border-top: 0; background: var(--sunk); }
+table.grid thead th small { display: block; font-weight: 500; letter-spacing: .02em; text-transform: none; }
+table.grid .l { text-align: left; }
+table.grid .pos { width: 1%; color: var(--muted); font-weight: 600; text-align: center; }
+table.grid .team { position: sticky; left: 0; background: var(--card); z-index: 1; min-width: 180px; white-space: normal; }
+table.grid thead .team { background: var(--sunk); }
+.tn { font-weight: 600; line-height: 1.25; } .mn { color: var(--muted); font-size: 13px; }
+table.grid .tot { font-weight: 700; font-size: 16px; }
+td.hi { background: var(--blue-soft); color: var(--blue); font-weight: 700; }
+td.lo { background: var(--red-soft); color: var(--red); font-weight: 700; }
+td.na { color: var(--muted); }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 13px; color: var(--muted); padding: 10px 16px 14px; }
+.sw { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: -1px; margin-right: 6px; }
+.sw.hi { background: var(--blue-soft); border: 1px solid var(--blue); } .sw.lo { background: var(--red-soft); border: 1px solid var(--red); }
+
+.pill { display: inline-block; font: 700 11px/1 var(--f-label); letter-spacing: .1em; text-transform: uppercase; padding: 4px 8px; border-radius: 999px; white-space: nowrap; vertical-align: 1px; }
+.pill.win { background: var(--blue); color: #FFFFFF; }
+.pill.low { background: var(--red); color: #FFFFFF; }
+.pill.done { background: var(--edge); color: #FFFFFF; }
+.pill.live { background: var(--red-soft); color: var(--red); }
+.pill.soon { background: var(--sunk); color: var(--muted); }
+
+.months { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+.month { text-align: left; font: inherit; color: inherit; text-decoration: none; background: var(--card); border: 2px solid var(--line); border-radius: 12px; padding: 14px 16px; cursor: pointer; display: grid; gap: 8px; }
+.month:hover { border-color: var(--edge); box-shadow: 0 4px 0 var(--edge); }
+.month .jump { color: var(--blue); font: 600 12px/1 var(--f-label); letter-spacing: .1em; text-transform: uppercase; }
+.month .mh { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.month .mt { font: 700 18px/1.1 var(--f-label); letter-spacing: .04em; text-transform: uppercase; }
+.month .gws { color: var(--muted); font-size: 13px; }
+.month .row { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; }
+.month .row b { font-variant-numeric: tabular-nums; }
+.month .who { min-width: 0; } .month .who .lab { display: block; font: 600 11px/1.2 var(--f-label); letter-spacing: .1em; text-transform: uppercase; }
+.lab.w { color: var(--blue); } .lab.l { color: var(--red); }
+
+.ties { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.tie .sides { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 10px; padding: 4px 16px 12px; }
+.side { background: var(--sunk); border-radius: 10px; padding: 10px 12px; display: grid; gap: 6px; min-width: 0; }
+.side.through { background: var(--blue-soft); outline: 2px solid var(--blue); }
+.side.out { opacity: .7; }
+.side .tm { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.side .tm .tn { font-size: 14px; min-width: 0; overflow-wrap: anywhere; } .side .tm .mn { font-size: 12px; white-space: nowrap; }
+.vs { width: 34px; height: 34px; border-radius: 50%; background: var(--edge); color: #FFFFFF; display: grid; place-items: center; font: 700 13px/1 var(--f-label); border: 2px solid var(--red); }
+table.legs th:nth-child(3), table.legs td:nth-child(3), table.legs th:nth-child(4), table.legs td:nth-child(4) { width: 30%; }
+table.legs td .bd { display: block; font-size: 12px; color: var(--muted); font-weight: 400; }
+table.legs tr.agg td { font-weight: 700; font-size: 17px; border-top: 2px solid var(--edge); }
+.tie-foot { padding: 10px 16px 14px; font-size: 13px; color: var(--muted); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.ties.one { grid-template-columns: minmax(0, 560px); justify-content: center; }
+.side.tbc { background: transparent; border: 2px dashed var(--line); }
+
+.notice { max-width: 640px; margin: 0 auto; width: 100%; }
+.notice-body { padding: 22px 22px 24px; display: grid; gap: 10px; text-align: center; }
+.notice-body h3 { font: 400 clamp(34px, 6vw, 48px)/1.1 var(--f-display); color: var(--ink); }
+.notice-body p { margin: 0; }
+.notice-body .big { font-size: 18px; }
+.notice-body .m { color: var(--muted); font-size: 14px; }
+.kinds { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.side .backer { font: 700 12px/1.2 var(--f-label); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.side .pick { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+.side .pick .pts { font-weight: 700; font-variant-numeric: tabular-nums; }
+.side .sum { display: flex; justify-content: space-between; align-items: baseline; border-top: 1px solid var(--line); padding-top: 6px; }
+.side .sum b { font: 700 26px/1 var(--f-label); font-variant-numeric: tabular-nums; }
+.side.ahead { background: var(--blue-soft); }
+.side.ahead .sum b { color: var(--blue); }
+@media (max-width: 760px) { .kinds { grid-template-columns: minmax(0, 1fr); } }
+
+footer { padding-block: 18px 22px; text-align: center; color: var(--muted); font-size: 13px; }
+@media (max-width: 760px) {
+  body { font-size: 14px; }
+  nav.tabs { gap: 6px; padding-block: 10px; box-shadow: 0 6px 8px -8px rgba(0, 0, 0, .35); }
+  .tab { font-size: 13px; padding: 8px 12px; min-height: 40px; letter-spacing: .04em; }
+  .tab .full { display: none; } .tab .short { display: inline; }
+  .panel, .board { scroll-margin-top: 120px; }
+  header.mast { padding-block: 4px 0; }
+  .mast-meta { padding-bottom: 10px; }
+  table.grid th, table.grid td { padding: 7px 8px; }
+  .tiles { grid-template-columns: minmax(0, 1fr); }
+  .ties { grid-template-columns: minmax(0, 1fr); }
+  .tie .sides { grid-template-columns: minmax(0, 1fr); justify-items: stretch; }
+  .tie .sides .vs { justify-self: center; }
+  table.grid .team { min-width: 140px; }
+}
+@media (prefers-reduced-motion: no-preference) { .tab, .month { transition: background .15s, border-color .15s, box-shadow .15s; } }
+</style>
+
+<div class="stripe band" aria-hidden="true"></div>
+<header class="mast wrap">
+  <div class="mast-meta">
+    <span class="eyebrow">FPL Draft · League 1099</span>
+    <p class="sub" id="sub">SLGB · Season 2026/27 · 16 managers · after GW6</p>
+  </div>
+  <h1 class="logo">SLGB</h1>
+</header>
+
+<div class="wrap">
+  <!-- Tabs are links so they still work where scripts can't run (phone file viewers): there every panel shows in turn and a tab jumps to it. -->
+  <nav class="tabs" aria-label="Sections">
+    <a class="tab" href="#gameweeks" id="tab-gameweeks" aria-selected="true"><span class="full">Gameweek scores</span><span class="short">Scores</span></a>
+    <a class="tab" href="#motm" id="tab-motm" aria-selected="false"><span class="full">Manager of the Month</span><span class="short">MOTM</span></a>
+    <a class="tab" href="#cup" id="tab-cup" aria-selected="false"><span class="full">Chuckle Trade Trophy</span><span class="short">Chuckle Cup</span></a>
+    <a class="tab" href="#copa" id="tab-copa" aria-selected="false"><span class="full">Copa Del Gayboys</span><span class="short">Copa</span></a>
+    <a class="tab" href="#sideys" id="tab-sideys" aria-selected="false"><span class="full">Sideys</span><span class="short">Sideys</span></a>
+  </nav>
+  <main>
+    <section class="panel" id="gameweeks" aria-labelledby="tab-gameweeks"><h2 class="panel-title">Gameweek scores</h2>
+    <div class="tiles">
+      <div class="tile"><div class="k">Top of the league</div><div class="v">316</div>
+        <div class="n">Dan Smith</div><div class="m">SMID ⭐️⭐️⭐️🏆🏆🏆 · 31 clear</div></div>
+      <div class="tile"><div class="k">GW6 top score </div><div class="v">55</div>
+        <div class="n">Doug Whitfield</div><div class="m">Doug&#39;s Dreamers 💩👬</div></div>
+      <div class="tile"><div class="k">Best single gameweek</div><div class="v">80</div>
+        <div class="n">Mike Whitefield</div><div class="m">Warriors ⭐️💩 · GW1</div></div>
+    </div>
+    <div class="board"><div class="stripe" aria-hidden="true"></div>
+      <div class="board-head"><h3>Gameweek scores</h3><span class="note">GW1–6 · sorted by season total</span></div>
+      <div class="scroll"><table class="grid">
+        <thead><tr><th class="pos">#</th><th class="l team">Team</th><th>GW1<small>21 Aug</small></th><th>GW2<small>28 Aug</small></th><th>GW3<small>4 Sept</small></th><th>GW4<small>12 Sept</small></th><th>GW5<small>18 Sept</small></th><th>GW6<small>10 Oct</small></th><th>Total</th></tr></thead>
+        <tbody><tr><td class="pos">1</td><th class="l team" scope="row"><div class="tn">SMID ⭐️⭐️⭐️🏆🏆🏆</div><div class="mn">Dan Smith</div></th><td class="">73</td><td class="">48</td><td class="">43</td><td class="hi">65</td><td class="">52</td><td class="">35</td><td class="tot">316</td></tr><tr><td class="pos">2</td><th class="l team" scope="row"><div class="tn">Warriors ⭐️💩</div><div class="mn">Mike Whitefield</div></th><td class="hi">80</td><td class="">31</td><td class="">38</td><td class="">57</td><td class="">39</td><td class="">40</td><td class="tot">285</td></tr><tr><td class="pos">3</td><th class="l team" scope="row"><div class="tn">Stotes 🐍’s ⭐️⭐️🏆🏆</div><div class="mn">Andy Whitefield</div></th><td class="">49</td><td class="">24</td><td class="hi">61</td><td class="">51</td><td class="">48</td><td class="">44</td><td class="tot">277</td></tr><tr><td class="pos">4</td><th class="l team" scope="row"><div class="tn">Depeche’s Dingers 👬</div><div class="mn">Dan Peach</div></th><td class="">52</td><td class="">41</td><td class="">31</td><td class="">45</td><td class="">58</td><td class="">44</td><td class="tot">271</td></tr><tr><td class="pos">5</td><th class="l team" scope="row"><div class="tn">Fantasy Toon Army</div><div class="mn">Bradley Welch</div></th><td class="">36</td><td class="hi">57</td><td class="">31</td><td class="">46</td><td class="">55</td><td class="">40</td><td class="tot">265</td></tr><tr><td class="pos">6</td><th class="l team" scope="row"><div class="tn">Doug&#39;s Dreamers 💩👬</div><div class="mn">Doug Whitfield</div></th><td class="">40</td><td class="">36</td><td class="">29</td><td class="">39</td><td class="hi">61</td><td class="hi">55</td><td class="tot">260</td></tr><tr><td class="pos">7</td><th class="l team" scope="row"><div class="tn">The Mighty D&#39;s 🏆🏆</div><div class="mn">Carl Lazenby</div></th><td class="">41</td><td class="">38</td><td class="">38</td><td class="">40</td><td class="">29</td><td class="">39</td><td class="tot">225</td></tr><tr><td class="pos">8</td><th class="l team" scope="row"><div class="tn">Not So Smug 👬🏿</div><div class="mn">George Pugson</div></th><td class="">38</td><td class="">42</td><td class="">28</td><td class="">47</td><td class="">36</td><td class="">28</td><td class="tot">219</td></tr><tr><td class="pos">9</td><th class="l team" scope="row"><div class="tn">Rajakhstan</div><div class="mn">AJ Carvell</div></th><td class="">37</td><td class="">49</td><td class="">23</td><td class="">32</td><td class="">44</td><td class="">32</td><td class="tot">217</td></tr><tr><td class="pos">10</td><th class="l team" scope="row"><div class="tn">Man On Luke</div><div class="mn">Luke Paul</div></th><td class="">20</td><td class="">43</td><td class="">37</td><td class="">33</td><td class="">57</td><td class="">25</td><td class="tot">215</td></tr><tr><td class="pos">11</td><th class="l team" scope="row"><div class="tn">The Highlanders🏆🏆⭐</div><div class="mn">Alex McGown</div></th><td class="">22</td><td class="">45</td><td class="">32</td><td class="">46</td><td class="">29</td><td class="">35</td><td class="tot">209</td></tr><tr><td class="pos">12</td><th class="l team" scope="row"><div class="tn">Team Tadpole 🏆💩</div><div class="mn">Jonny May</div></th><td class="">22</td><td class="">37</td><td class="">36</td><td class="">32</td><td class="">25</td><td class="">50</td><td class="tot">202</td></tr><tr><td class="pos">13</td><th class="l team" scope="row"><div class="tn">Crusty Beef Flaps⭐💩</div><div class="mn">Addy Field</div></th><td class="">20</td><td class="">38</td><td class="">37</td><td class="">42</td><td class="">26</td><td class="lo">18</td><td class="tot">181</td></tr><tr><td class="pos">14</td><th class="l team" scope="row"><div class="tn">Team Sky Rocket</div><div class="mn">Charlie Rutter</div></th><td class="">33</td><td class="">25</td><td class="">41</td><td class="">27</td><td class="lo">21</td><td class="">33</td><td class="tot">180</td></tr><tr><td class="pos">15</td><th class="l team" scope="row"><div class="tn">Browns Boys ⭐️</div><div class="mn">Mike Towill</div></th><td class="">30</td><td class="lo">23</td><td class="">40</td><td class="">22</td><td class="">24</td><td class="">27</td><td class="tot">166</td></tr><tr><td class="pos">16</td><th class="l team" scope="row"><div class="tn">Hods Checkouts 💩</div><div class="mn">Sam Hodkinson</div></th><td class="lo">19</td><td class="">39</td><td class="lo">22</td><td class="lo">20</td><td class="">37</td><td class="">20</td><td class="tot">157</td></tr></tbody></table></div>
+      <div class="legend"><span><i class="sw hi"></i>Highest that gameweek</span><span><i class="sw lo"></i>Lowest that gameweek</span></div>
+    </div></section>
+    <section class="panel" id="motm" aria-labelledby="tab-motm"><h2 class="panel-title">Manager of the Month</h2>
+    <p class="lede">Points scored in each calendar month, grouped by gameweek deadline (UK time). Equal totals share a place.</p>
+    <div class="months">
+    <a class="month" href="#month-2026-08">
+      <span class="mh"><span class="mt">August 2026</span><span class="pill done">Final</span></span>
+      <span class="gws">GW1–2 · 2 of 2 played</span>
+      <span class="row"><span class="who"><span class="lab w">Manager of the Month</span>Dan Smith</span><b>121</b></span>
+      <span class="row"><span class="who"><span class="lab l">Lowest</span>Mike Towill</span><b>53</b></span>
+      <span class="jump">Full table ↓</span>
+    </a>
+    <a class="month" href="#month-2026-09">
+      <span class="mh"><span class="mt">September 2026</span><span class="pill done">Final</span></span>
+      <span class="gws">GW3–5 · 3 of 3 played</span>
+      <span class="row"><span class="who"><span class="lab w">Manager of the Month</span>Andy Whitefield & Dan Smith</span><b>160</b></span>
+      <span class="row"><span class="who"><span class="lab l">Lowest</span>Sam Hodkinson</span><b>79</b></span>
+      <span class="jump">Full table ↓</span>
+    </a>
+    <a class="month" href="#month-2026-10">
+      <span class="mh"><span class="mt">October 2026</span><span class="pill live">In progress</span></span>
+      <span class="gws">GW6–9 · 1 of 4 played</span>
+      <span class="row"><span class="who"><span class="lab w">Leading</span>Doug Whitfield</span><b>55</b></span>
+      <span class="row"><span class="who"><span class="lab l">Lowest</span>Addy Field</span><b>18</b></span>
+      <span class="jump">Full table ↓</span>
+    </a></div>
+    
+    <div class="board" id="month-2026-10"><div class="stripe" aria-hidden="true"></div>
+      <div class="board-head"><h3>October 2026</h3>
+        <span class="note">1 of 4 gameweeks played · standings provisional</span></div>
+      <div class="scroll"><table class="grid">
+        <thead><tr><th class="pos">#</th><th class="l team">Team</th><th>GW6<small>10 Oct</small></th><th>GW7<small>17 Oct</small></th><th>GW8<small>23 Oct</small></th><th>GW9<small>31 Oct</small></th><th>Month</th><th class="l"><span hidden>Award</span></th></tr></thead>
+        <tbody><tr><td class="pos">1</td><th class="l team" scope="row"><div class="tn">Doug&#39;s Dreamers 💩👬</div><div class="mn">Doug Whitfield</div></th><td class="">55</td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td class="tot">55</td><td class="l"><span class="pill win">Leading</span></td></tr><tr><td class="pos">2</td><th class="l team" scope="row"><div class="tn">Team Tadpole 🏆💩</div><div class="mn">Jonny May</div></th><td class="">50</td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td class="tot">50</td><td class="l"></td></tr><tr><td class="pos">3</td><th class="l team" scope="row"><div class="tn">Stotes 🐍’s ⭐️⭐️🏆🏆</div><div class="mn">Andy Whitefield</div></th><td class="">44</td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td class="tot">44</td><td class="l"></td></tr><tr><td class="pos">3</td><th class="l team" scope="row"><div class="tn">Depeche’s Dingers 👬</div><div class="mn">Dan Peach</div></th><td class="">44</td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td class="tot">44</td><td class="l"></td></tr><tr><td class="pos">5</td><th class="l team" scope="row"><div class="tn">Warriors ⭐️💩</div><div class="mn">Mike Whitefield</div></th><td class="">40</td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td class="tot">40</td><td class="l"></td></tr><tr><td class="pos">5</td><th class="l team" scope="row"><div class="tn">Fantasy Toon Army</div><div class="mn">Bradley Welch</div></th><td class="">40</td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td class="tot">40</td><td class="l"></td></tr><tr><td class="pos">7</td><th class="l team" scope="row"><div class="tn">The Mighty D&#39;s 🏆🏆</div><div class="mn">Carl Lazenby</div></th><td class="">39</td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td class="tot">39</td><td class="l"></td></tr><tr><td class="pos">8</td><th class="l team" scope="row"><div class="tn">SMID ⭐️⭐️⭐️🏆🏆🏆</div><div class="mn">Dan Smith</div></th><td class="">35</td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td class="tot">35</td><td class="l"></td></tr><tr><td class="pos">8</td><th class="l team" scope="row"><div class="tn">The Highlanders🏆🏆⭐</div><div class="mn">Alex McGown</div></th><td class="">35</td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td class="tot">35</td><td class="l"></td></tr><tr><td class="pos">10</td><th class="l team" scope="row"><div class="tn">Team Sky Rocket</div><div class="mn">Charlie Rutter</div></th><td class="">33</td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td class="tot">33</td><td class="l"></td></tr><tr><td class="pos">11</td><th class="l team" scope="row"><div class="tn">Rajakhstan</div><div class="mn">AJ Carvell</div></th><td class="">32</td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td class="tot">32</td><td class="l"></td></tr><tr><td class="pos">12</td><th class="l team" scope="row"><div class="tn">Not So Smug 👬🏿</div><div class="mn">George Pugson</div></th><td class="">28</td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td class="tot">28</td><td class="l"></td></tr><tr><td class="pos">13</td><th class="l team" scope="row"><div class="tn">Browns Boys ⭐️</div><div class="mn">Mike Towill</div></th><td class="">27</td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td class="tot">27</td><td class="l"></td></tr><tr><td class="pos">14</td><th class="l team" scope="row"><div class="tn">Man On Luke</div><div class="mn">Luke Paul</div></th><td class="">25</td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td class="tot">25</td><td class="l"></td></tr><tr><td class="pos">15</td><th class="l team" scope="row"><div class="tn">Hods Checkouts 💩</div><div class="mn">Sam Hodkinson</div></th><td class="">20</td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td class="tot">20</td><td class="l"></td></tr><tr><td class="pos">16</td><th class="l team" scope="row"><div class="tn">Crusty Beef Flaps⭐💩</div><div class="mn">Addy Field</div></th><td class="">18</td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td class="tot">18</td><td class="l"><span class="pill low">Lowest</span></td></tr></tbody></table></div>
+    </div>
+    <div class="board" id="month-2026-09"><div class="stripe" aria-hidden="true"></div>
+      <div class="board-head"><h3>September 2026</h3>
+        <span class="note">All gameweeks played</span></div>
+      <div class="scroll"><table class="grid">
+        <thead><tr><th class="pos">#</th><th class="l team">Team</th><th>GW3<small>4 Sept</small></th><th>GW4<small>12 Sept</small></th><th>GW5<small>18 Sept</small></th><th>Month</th><th class="l"><span hidden>Award</span></th></tr></thead>
+        <tbody><tr><td class="pos">1</td><th class="l team" scope="row"><div class="tn">Stotes 🐍’s ⭐️⭐️🏆🏆</div><div class="mn">Andy Whitefield</div></th><td class="">61</td><td class="">51</td><td class="">48</td><td class="tot">160</td><td class="l"><span class="pill win">MOTM</span></td></tr><tr><td class="pos">1</td><th class="l team" scope="row"><div class="tn">SMID ⭐️⭐️⭐️🏆🏆🏆</div><div class="mn">Dan Smith</div></th><td class="">43</td><td class="">65</td><td class="">52</td><td class="tot">160</td><td class="l"><span class="pill win">MOTM</span></td></tr><tr><td class="pos">3</td><th class="l team" scope="row"><div class="tn">Warriors ⭐️💩</div><div class="mn">Mike Whitefield</div></th><td class="">38</td><td class="">57</td><td class="">39</td><td class="tot">134</td><td class="l"></td></tr><tr><td class="pos">3</td><th class="l team" scope="row"><div class="tn">Depeche’s Dingers 👬</div><div class="mn">Dan Peach</div></th><td class="">31</td><td class="">45</td><td class="">58</td><td class="tot">134</td><td class="l"></td></tr><tr><td class="pos">5</td><th class="l team" scope="row"><div class="tn">Fantasy Toon Army</div><div class="mn">Bradley Welch</div></th><td class="">31</td><td class="">46</td><td class="">55</td><td class="tot">132</td><td class="l"></td></tr><tr><td class="pos">6</td><th class="l team" scope="row"><div class="tn">Doug&#39;s Dreamers 💩👬</div><div class="mn">Doug Whitfield</div></th><td class="">29</td><td class="">39</td><td class="">61</td><td class="tot">129</td><td class="l"></td></tr><tr><td class="pos">7</td><th class="l team" scope="row"><div class="tn">Man On Luke</div><div class="mn">Luke Paul</div></th><td class="">37</td><td class="">33</td><td class="">57</td><td class="tot">127</td><td class="l"></td></tr><tr><td class="pos">8</td><th class="l team" scope="row"><div class="tn">Not So Smug 👬🏿</div><div class="mn">George Pugson</div></th><td class="">28</td><td class="">47</td><td class="">36</td><td class="tot">111</td><td class="l"></td></tr><tr><td class="pos">9</td><th class="l team" scope="row"><div class="tn">The Mighty D&#39;s 🏆🏆</div><div class="mn">Carl Lazenby</div></th><td class="">38</td><td class="">40</td><td class="">29</td><td class="tot">107</td><td class="l"></td></tr><tr><td class="pos">9</td><th class="l team" scope="row"><div class="tn">The Highlanders🏆🏆⭐</div><div class="mn">Alex McGown</div></th><td class="">32</td><td class="">46</td><td class="">29</td><td class="tot">107</td><td class="l"></td></tr><tr><td class="pos">11</td><th class="l team" scope="row"><div class="tn">Crusty Beef Flaps⭐💩</div><div class="mn">Addy Field</div></th><td class="">37</td><td class="">42</td><td class="">26</td><td class="tot">105</td><td class="l"></td></tr><tr><td class="pos">12</td><th class="l team" scope="row"><div class="tn">Rajakhstan</div><div class="mn">AJ Carvell</div></th><td class="">23</td><td class="">32</td><td class="">44</td><td class="tot">99</td><td class="l"></td></tr><tr><td class="pos">13</td><th class="l team" scope="row"><div class="tn">Team Tadpole 🏆💩</div><div class="mn">Jonny May</div></th><td class="">36</td><td class="">32</td><td class="">25</td><td class="tot">93</td><td class="l"></td></tr><tr><td class="pos">14</td><th class="l team" scope="row"><div class="tn">Team Sky Rocket</div><div class="mn">Charlie Rutter</div></th><td class="">41</td><td class="">27</td><td class="">21</td><td class="tot">89</td><td class="l"></td></tr><tr><td class="pos">15</td><th class="l team" scope="row"><div class="tn">Browns Boys ⭐️</div><div class="mn">Mike Towill</div></th><td class="">40</td><td class="">22</td><td class="">24</td><td class="tot">86</td><td class="l"></td></tr><tr><td class="pos">16</td><th class="l team" scope="row"><div class="tn">Hods Checkouts 💩</div><div class="mn">Sam Hodkinson</div></th><td class="">22</td><td class="">20</td><td class="">37</td><td class="tot">79</td><td class="l"><span class="pill low">Lowest</span></td></tr></tbody></table></div>
+    </div>
+    <div class="board" id="month-2026-08"><div class="stripe" aria-hidden="true"></div>
+      <div class="board-head"><h3>August 2026</h3>
+        <span class="note">All gameweeks played</span></div>
+      <div class="scroll"><table class="grid">
+        <thead><tr><th class="pos">#</th><th class="l team">Team</th><th>GW1<small>21 Aug</small></th><th>GW2<small>28 Aug</small></th><th>Month</th><th class="l"><span hidden>Award</span></th></tr></thead>
+        <tbody><tr><td class="pos">1</td><th class="l team" scope="row"><div class="tn">SMID ⭐️⭐️⭐️🏆🏆🏆</div><div class="mn">Dan Smith</div></th><td class="">73</td><td class="">48</td><td class="tot">121</td><td class="l"><span class="pill win">MOTM</span></td></tr><tr><td class="pos">2</td><th class="l team" scope="row"><div class="tn">Warriors ⭐️💩</div><div class="mn">Mike Whitefield</div></th><td class="">80</td><td class="">31</td><td class="tot">111</td><td class="l"></td></tr><tr><td class="pos">3</td><th class="l team" scope="row"><div class="tn">Depeche’s Dingers 👬</div><div class="mn">Dan Peach</div></th><td class="">52</td><td class="">41</td><td class="tot">93</td><td class="l"></td></tr><tr><td class="pos">3</td><th class="l team" scope="row"><div class="tn">Fantasy Toon Army</div><div class="mn">Bradley Welch</div></th><td class="">36</td><td class="">57</td><td class="tot">93</td><td class="l"></td></tr><tr><td class="pos">5</td><th class="l team" scope="row"><div class="tn">Rajakhstan</div><div class="mn">AJ Carvell</div></th><td class="">37</td><td class="">49</td><td class="tot">86</td><td class="l"></td></tr><tr><td class="pos">6</td><th class="l team" scope="row"><div class="tn">Not So Smug 👬🏿</div><div class="mn">George Pugson</div></th><td class="">38</td><td class="">42</td><td class="tot">80</td><td class="l"></td></tr><tr><td class="pos">7</td><th class="l team" scope="row"><div class="tn">The Mighty D&#39;s 🏆🏆</div><div class="mn">Carl Lazenby</div></th><td class="">41</td><td class="">38</td><td class="tot">79</td><td class="l"></td></tr><tr><td class="pos">8</td><th class="l team" scope="row"><div class="tn">Doug&#39;s Dreamers 💩👬</div><div class="mn">Doug Whitfield</div></th><td class="">40</td><td class="">36</td><td class="tot">76</td><td class="l"></td></tr><tr><td class="pos">9</td><th class="l team" scope="row"><div class="tn">Stotes 🐍’s ⭐️⭐️🏆🏆</div><div class="mn">Andy Whitefield</div></th><td class="">49</td><td class="">24</td><td class="tot">73</td><td class="l"></td></tr><tr><td class="pos">10</td><th class="l team" scope="row"><div class="tn">The Highlanders🏆🏆⭐</div><div class="mn">Alex McGown</div></th><td class="">22</td><td class="">45</td><td class="tot">67</td><td class="l"></td></tr><tr><td class="pos">11</td><th class="l team" scope="row"><div class="tn">Man On Luke</div><div class="mn">Luke Paul</div></th><td class="">20</td><td class="">43</td><td class="tot">63</td><td class="l"></td></tr><tr><td class="pos">12</td><th class="l team" scope="row"><div class="tn">Team Tadpole 🏆💩</div><div class="mn">Jonny May</div></th><td class="">22</td><td class="">37</td><td class="tot">59</td><td class="l"></td></tr><tr><td class="pos">13</td><th class="l team" scope="row"><div class="tn">Crusty Beef Flaps⭐💩</div><div class="mn">Addy Field</div></th><td class="">20</td><td class="">38</td><td class="tot">58</td><td class="l"></td></tr><tr><td class="pos">13</td><th class="l team" scope="row"><div class="tn">Team Sky Rocket</div><div class="mn">Charlie Rutter</div></th><td class="">33</td><td class="">25</td><td class="tot">58</td><td class="l"></td></tr><tr><td class="pos">13</td><th class="l team" scope="row"><div class="tn">Hods Checkouts 💩</div><div class="mn">Sam Hodkinson</div></th><td class="">19</td><td class="">39</td><td class="tot">58</td><td class="l"></td></tr><tr><td class="pos">16</td><th class="l team" scope="row"><div class="tn">Browns Boys ⭐️</div><div class="mn">Mike Towill</div></th><td class="">30</td><td class="">23</td><td class="tot">53</td><td class="l"><span class="pill low">Lowest</span></td></tr></tbody></table></div>
+    </div></section>
+    <section class="panel" id="cup" aria-labelledby="tab-cup"><h2 class="panel-title">Chuckle Trade Trophy</h2>
+    <p class="lede">Sixteen teams were drawn into eight pairs, and each pair plays another pair over two legs. A pair scores both teams' gameweek points added together, and the higher aggregate goes through. The winners of Ties 1 and 2 meet in one semi-final and the winners of Ties 3 and 4 in the other. Drawn 22 Sept 2026, starting GW6.</p>
+    <h2 class="sec">Round 1 · GW6 &amp; GW7</h2>
+      <div class="ties"><article class="board tie"><div class="stripe" aria-hidden="true"></div>
+    <div class="board-head"><h3>Tie 1</h3><span class="pill live">In progress</span></div>
+    <div class="sides"><div class="side ">
+      <div class="tm"><span class="tn">Crusty Beef Flaps⭐💩</span><span class="mn">Addy Field</span></div><div class="tm"><span class="tn">Rajakhstan</span><span class="mn">AJ Carvell</span></div>
+      </div><div class="vs">VS</div><div class="side ">
+      <div class="tm"><span class="tn">Hods Checkouts 💩</span><span class="mn">Sam Hodkinson</span></div><div class="tm"><span class="tn">The Mighty D&#39;s 🏆🏆</span><span class="mn">Carl Lazenby</span></div>
+      </div></div>
+    <div class="scroll"><table class="grid legs">
+      <thead><tr><th class="l">Leg</th><th class="l">Gameweek</th><th>Addy &amp; AJ</th><th>Sam &amp; Carl</th></tr></thead>
+      <tbody><tr><td class="l">First leg</td><td class="l">GW6 </td><td class="">50<span class="bd">18 + 32</span></td><td class="hi">59<span class="bd">20 + 39</span></td></tr><tr><td class="l">Second leg</td><td class="l">GW7 <span class="pill soon">To play</span></td><td class="na">–</td><td class="na">–</td></tr>
+      <tr class="agg"><td class="l" colspan="2">Aggregate</td><td>50</td><td>59</td></tr></tbody>
+    </table></div>
+    <div class="tie-foot">Sam &amp; Carl lead by 9 · Leg 2 is GW7, deadline Sat 17 Oct, 11:00</div></article><article class="board tie"><div class="stripe" aria-hidden="true"></div>
+    <div class="board-head"><h3>Tie 2</h3><span class="pill live">In progress</span></div>
+    <div class="sides"><div class="side ">
+      <div class="tm"><span class="tn">Team Sky Rocket</span><span class="mn">Charlie Rutter</span></div><div class="tm"><span class="tn">The Highlanders🏆🏆⭐</span><span class="mn">Alex McGown</span></div>
+      </div><div class="vs">VS</div><div class="side ">
+      <div class="tm"><span class="tn">Stotes 🐍’s ⭐️⭐️🏆🏆</span><span class="mn">Andy Whitefield</span></div><div class="tm"><span class="tn">Man On Luke</span><span class="mn">Luke Paul</span></div>
+      </div></div>
+    <div class="scroll"><table class="grid legs">
+      <thead><tr><th class="l">Leg</th><th class="l">Gameweek</th><th>Charlie &amp; Alex</th><th>Andy &amp; Luke</th></tr></thead>
+      <tbody><tr><td class="l">First leg</td><td class="l">GW6 </td><td class="">68<span class="bd">33 + 35</span></td><td class="hi">69<span class="bd">44 + 25</span></td></tr><tr><td class="l">Second leg</td><td class="l">GW7 <span class="pill soon">To play</span></td><td class="na">–</td><td class="na">–</td></tr>
+      <tr class="agg"><td class="l" colspan="2">Aggregate</td><td>68</td><td>69</td></tr></tbody>
+    </table></div>
+    <div class="tie-foot">Andy &amp; Luke lead by 1 · Leg 2 is GW7, deadline Sat 17 Oct, 11:00</div></article><article class="board tie"><div class="stripe" aria-hidden="true"></div>
+    <div class="board-head"><h3>Tie 3</h3><span class="pill live">In progress</span></div>
+    <div class="sides"><div class="side ">
+      <div class="tm"><span class="tn">Warriors ⭐️💩</span><span class="mn">Mike Whitefield</span></div><div class="tm"><span class="tn">Team Tadpole 🏆💩</span><span class="mn">Jonny May</span></div>
+      </div><div class="vs">VS</div><div class="side ">
+      <div class="tm"><span class="tn">Depeche’s Dingers 👬</span><span class="mn">Dan Peach</span></div><div class="tm"><span class="tn">Browns Boys ⭐️</span><span class="mn">Mike Towill</span></div>
+      </div></div>
+    <div class="scroll"><table class="grid legs">
+      <thead><tr><th class="l">Leg</th><th class="l">Gameweek</th><th>Mike W &amp; Jonny</th><th>Dan P &amp; Mike T</th></tr></thead>
+      <tbody><tr><td class="l">First leg</td><td class="l">GW6 </td><td class="hi">90<span class="bd">40 + 50</span></td><td class="">71<span class="bd">44 + 27</span></td></tr><tr><td class="l">Second leg</td><td class="l">GW7 <span class="pill soon">To play</span></td><td class="na">–</td><td class="na">–</td></tr>
+      <tr class="agg"><td class="l" colspan="2">Aggregate</td><td>90</td><td>71</td></tr></tbody>
+    </table></div>
+    <div class="tie-foot">Mike W &amp; Jonny lead by 19 · Leg 2 is GW7, deadline Sat 17 Oct, 11:00</div></article><article class="board tie"><div class="stripe" aria-hidden="true"></div>
+    <div class="board-head"><h3>Tie 4</h3><span class="pill live">In progress</span></div>
+    <div class="sides"><div class="side ">
+      <div class="tm"><span class="tn">SMID ⭐️⭐️⭐️🏆🏆🏆</span><span class="mn">Dan Smith</span></div><div class="tm"><span class="tn">Doug&#39;s Dreamers 💩👬</span><span class="mn">Doug Whitfield</span></div>
+      </div><div class="vs">VS</div><div class="side ">
+      <div class="tm"><span class="tn">Not So Smug 👬🏿</span><span class="mn">George Pugson</span></div><div class="tm"><span class="tn">Fantasy Toon Army</span><span class="mn">Bradley Welch</span></div>
+      </div></div>
+    <div class="scroll"><table class="grid legs">
+      <thead><tr><th class="l">Leg</th><th class="l">Gameweek</th><th>Dan S &amp; Doug</th><th>George &amp; Bradley</th></tr></thead>
+      <tbody><tr><td class="l">First leg</td><td class="l">GW6 </td><td class="hi">90<span class="bd">35 + 55</span></td><td class="">68<span class="bd">28 + 40</span></td></tr><tr><td class="l">Second leg</td><td class="l">GW7 <span class="pill soon">To play</span></td><td class="na">–</td><td class="na">–</td></tr>
+      <tr class="agg"><td class="l" colspan="2">Aggregate</td><td>90</td><td>68</td></tr></tbody>
+    </table></div>
+    <div class="tie-foot">Dan S &amp; Doug lead by 22 · Leg 2 is GW7, deadline Sat 17 Oct, 11:00</div></article></div><h2 class="sec">Semi-finals · GW8 &amp; GW9</h2>
+      <div class="ties"><article class="board tie"><div class="stripe" aria-hidden="true"></div>
+    <div class="board-head"><h3>Semi-final 1</h3><span class="pill soon">To play</span></div>
+    <div class="sides"><div class="side tbc"><div class="tn">Winner of Tie 1</div><div class="mn">Addy &amp; AJ or Sam &amp; Carl</div></div><div class="vs">VS</div><div class="side tbc"><div class="tn">Winner of Tie 2</div><div class="mn">Charlie &amp; Alex or Andy &amp; Luke</div></div></div>
+    <div class="scroll"><table class="grid legs">
+      <thead><tr><th class="l">Leg</th><th class="l">Gameweek</th><th>Winner of Tie 1</th><th>Winner of Tie 2</th></tr></thead>
+      <tbody><tr><td class="l">First leg</td><td class="l">GW8 <span class="pill soon">To play</span></td><td class="na">–</td><td class="na">–</td></tr><tr><td class="l">Second leg</td><td class="l">GW9 <span class="pill soon">To play</span></td><td class="na">–</td><td class="na">–</td></tr>
+      <tr class="agg"><td class="l" colspan="2">Aggregate</td><td>–</td><td>–</td></tr></tbody>
+    </table></div>
+    <div class="tie-foot">Line-up confirmed after GW7. Leg 1 is GW8, deadline Fri 23 Oct, 18:30 · Leg 2 is GW9, deadline Sat 31 Oct, 11:00</div></article><article class="board tie"><div class="stripe" aria-hidden="true"></div>
+    <div class="board-head"><h3>Semi-final 2</h3><span class="pill soon">To play</span></div>
+    <div class="sides"><div class="side tbc"><div class="tn">Winner of Tie 3</div><div class="mn">Mike W &amp; Jonny or Dan P &amp; Mike T</div></div><div class="vs">VS</div><div class="side tbc"><div class="tn">Winner of Tie 4</div><div class="mn">Dan S &amp; Doug or George &amp; Bradley</div></div></div>
+    <div class="scroll"><table class="grid legs">
+      <thead><tr><th class="l">Leg</th><th class="l">Gameweek</th><th>Winner of Tie 3</th><th>Winner of Tie 4</th></tr></thead>
+      <tbody><tr><td class="l">First leg</td><td class="l">GW8 <span class="pill soon">To play</span></td><td class="na">–</td><td class="na">–</td></tr><tr><td class="l">Second leg</td><td class="l">GW9 <span class="pill soon">To play</span></td><td class="na">–</td><td class="na">–</td></tr>
+      <tr class="agg"><td class="l" colspan="2">Aggregate</td><td>–</td><td>–</td></tr></tbody>
+    </table></div>
+    <div class="tie-foot">Line-up confirmed after GW7. Leg 1 is GW8, deadline Fri 23 Oct, 18:30 · Leg 2 is GW9, deadline Sat 31 Oct, 11:00</div></article></div><h2 class="sec">Final · GW10 &amp; GW11</h2>
+      <div class="ties one"><article class="board tie"><div class="stripe" aria-hidden="true"></div>
+    <div class="board-head"><h3>Final</h3><span class="pill soon">To play</span></div>
+    <div class="sides"><div class="side tbc"><div class="tn">Winner of Semi-final 1</div><div class="mn">Winner of Tie 1 or Winner of Tie 2</div></div><div class="vs">VS</div><div class="side tbc"><div class="tn">Winner of Semi-final 2</div><div class="mn">Winner of Tie 3 or Winner of Tie 4</div></div></div>
+    <div class="scroll"><table class="grid legs">
+      <thead><tr><th class="l">Leg</th><th class="l">Gameweek</th><th>Winner of Semi-final 1</th><th>Winner of Semi-final 2</th></tr></thead>
+      <tbody><tr><td class="l">First leg</td><td class="l">GW10 <span class="pill soon">To play</span></td><td class="na">–</td><td class="na">–</td></tr><tr><td class="l">Second leg</td><td class="l">GW11 <span class="pill soon">To play</span></td><td class="na">–</td><td class="na">–</td></tr>
+      <tr class="agg"><td class="l" colspan="2">Aggregate</td><td>–</td><td>–</td></tr></tbody>
+    </table></div>
+    <div class="tie-foot">Line-up confirmed after GW9. Leg 1 is GW10, deadline Fri 6 Nov, 18:30 · Leg 2 is GW11, deadline Sat 21 Nov, 11:00</div></article></div></section>
+    <section class="panel" id="copa" aria-labelledby="tab-copa"><h2 class="panel-title">Copa Del Gayboys</h2>
+    <div class="board notice"><div class="stripe" aria-hidden="true"></div>
+      <div class="notice-body">
+        <h3>Copa Del Gayboys</h3>
+        <p class="big">The draw takes place in <b>GW19</b>, and the competition begins in <b>GW20</b>.</p>
+        <p class="m">GW19 (deadline Fri 1 Jan, 18:30) · GW20 (deadline Tue 5 Jan, 18:00)</p>
+      </div>
+    </div></section>
+    <section class="panel" id="sideys" aria-labelledby="tab-sideys"><h2 class="panel-title">Sideys</h2>
+    <p class="lede">Side bets between the group. Scores update from the same data as the rest of the page.</p>
+    <div class="ties"><article class="board tie bet"><div class="stripe" aria-hidden="true"></div>
+    <div class="board-head"><h3>Promise David v Beto</h3><span class="pill live">Live</span></div>
+    <div class="sides"><div class="side ">
+      <span class="backer">Alex (The Highlanders)</span>
+      <div class="pick"><span><span class="tn">Promise David</span><br><span class="mn">BHA · FWD · owned by Alex</span></span></div>
+      <div class="sum"><span class="mn">Points</span><b>1</b></div>
+      </div><div class="vs">VS</div><div class="side ahead">
+      <span class="backer">Addy (Crusty Beef Flaps)</span>
+      <div class="pick"><span><span class="tn">Beto</span><br><span class="mn">EVE · FWD · unowned</span></span></div>
+      <div class="sum"><span class="mn">Points</span><b>2</b></div>
+      </div></div>
+    <div class="tie-foot">Addy (Crusty Beef Flaps) leads by 1 · settles after GW38 · Player v player · Whole season · Stake: £50 · Highlanders v Crusty Beef Flaps</div></article><article class="board tie bet"><div class="stripe" aria-hidden="true"></div>
+    <div class="board-head"><h3>Carl v AJ</h3><span class="pill live">Live</span></div>
+    <div class="sides"><div class="side ahead">
+      <span class="backer">Carl</span>
+      <div class="pick"><span><span class="tn">The Mighty D&#39;s 🏆🏆</span><br><span class="mn">Carl Lazenby</span></span></div>
+      <div class="sum"><span class="mn">Points</span><b>225</b></div>
+      </div><div class="vs">VS</div><div class="side ">
+      <span class="backer">AJ</span>
+      <div class="pick"><span><span class="tn">Rajakhstan</span><br><span class="mn">AJ Carvell</span></span></div>
+      <div class="sum"><span class="mn">Points</span><b>217</b></div>
+      </div></div>
+    <div class="tie-foot">Carl leads by 8 · settles after GW38 · Head to head · Whole season · Stake: £50</div></article><article class="board tie bet"><div class="stripe" aria-hidden="true"></div>
+    <div class="board-head"><h3>Sam v Alex</h3><span class="pill live">Live</span></div>
+    <div class="sides"><div class="side ">
+      <span class="backer">Sam</span>
+      <div class="pick"><span><span class="tn">Hods Checkouts 💩</span><br><span class="mn">Sam Hodkinson</span></span></div>
+      <div class="sum"><span class="mn">Points</span><b>157</b></div>
+      </div><div class="vs">VS</div><div class="side ahead">
+      <span class="backer">Alex</span>
+      <div class="pick"><span><span class="tn">The Highlanders🏆🏆⭐</span><br><span class="mn">Alex McGown</span></span></div>
+      <div class="sum"><span class="mn">Points</span><b>209</b></div>
+      </div></div>
+    <div class="tie-foot">Alex leads by 52 · settles after GW38 · Head to head · Whole season · Stake: £50</div></article><article class="board tie bet"><div class="stripe" aria-hidden="true"></div>
+    <div class="board-head"><h3>Alex v AJ</h3><span class="pill live">Live</span></div>
+    <div class="sides"><div class="side ">
+      <span class="backer">Alex</span>
+      <div class="pick"><span><span class="tn">The Highlanders🏆🏆⭐</span><br><span class="mn">Alex McGown</span></span></div>
+      <div class="sum"><span class="mn">Points</span><b>209</b></div>
+      </div><div class="vs">VS</div><div class="side ahead">
+      <span class="backer">AJ</span>
+      <div class="pick"><span><span class="tn">Rajakhstan</span><br><span class="mn">AJ Carvell</span></span></div>
+      <div class="sum"><span class="mn">Points</span><b>217</b></div>
+      </div></div>
+    <div class="tie-foot">AJ leads by 8 · settles after GW38 · Head to head · Whole season · Stake: £50</div></article></div>
+    <div class="kinds">
+      <div class="tile"><div class="k">Head to head</div><div class="m">One manager's points against another's, over the whole season or a set of gameweeks.</div></div>
+      <div class="tile"><div class="k">Pair v pair</div><div class="m">Two managers' points combined against another two.</div></div>
+      <div class="tile"><div class="k">Player v player</div><div class="m">One Premier League player's FPL points against another's.</div></div>
+    </div></section>
+  </main>
+</div>
+<footer class="wrap" id="foot">Scores from the FPL Draft API, updated 16 October 2026 at 11:52.</footer>
+<div class="stripe" aria-hidden="true"></div>
+
+<script>
+const DATA = {"updated":"2026-10-16T10:52:18.7959064Z","leagueName":"SLGB","currentEvent":6,"currentFinished":true,"events":[{"id":1,"deadline":"2026-08-21T17:30:00Z","finished":true},{"id":2,"deadline":"2026-08-28T17:30:00Z","finished":true},{"id":3,"deadline":"2026-09-04T17:30:00Z","finished":true},{"id":4,"deadline":"2026-09-12T12:30:00Z","finished":true},{"id":5,"deadline":"2026-09-18T17:30:00Z","finished":true},{"id":6,"deadline":"2026-10-10T10:00:00Z","finished":true},{"id":7,"deadline":"2026-10-17T10:00:00Z","finished":false},{"id":8,"deadline":"2026-10-23T17:30:00Z","finished":false},{"id":9,"deadline":"2026-10-31T11:00:00Z","finished":false},{"id":10,"deadline":"2026-11-06T18:30:00Z","finished":false},{"id":11,"deadline":"2026-11-21T11:00:00Z","finished":false},{"id":12,"deadline":"2026-11-27T18:30:00Z","finished":false},{"id":13,"deadline":"2026-12-02T18:30:00Z","finished":false},{"id":14,"deadline":"2026-12-05T13:30:00Z","finished":false},{"id":15,"deadline":"2026-12-12T13:30:00Z","finished":false},{"id":16,"deadline":"2026-12-19T13:30:00Z","finished":false},{"id":17,"deadline":"2026-12-26T11:00:00Z","finished":false},{"id":18,"deadline":"2026-12-29T18:00:00Z","finished":false},{"id":19,"deadline":"2027-01-01T18:30:00Z","finished":false},{"id":20,"deadline":"2027-01-05T18:00:00Z","finished":false},{"id":21,"deadline":"2027-01-16T13:30:00Z","finished":false},{"id":22,"deadline":"2027-01-23T13:30:00Z","finished":false},{"id":23,"deadline":"2027-01-30T13:30:00Z","finished":false},{"id":24,"deadline":"2027-02-06T13:30:00Z","finished":false},{"id":25,"deadline":"2027-02-10T18:30:00Z","finished":false},{"id":26,"deadline":"2027-02-20T13:30:00Z","finished":false},{"id":27,"deadline":"2027-02-27T13:30:00Z","finished":false},{"id":28,"deadline":"2027-03-03T18:30:00Z","finished":false},{"id":29,"deadline":"2027-03-13T13:30:00Z","finished":false},{"id":30,"deadline":"2027-03-20T13:30:00Z","finished":false},{"id":31,"deadline":"2027-04-10T12:30:00Z","finished":false},{"id":32,"deadline":"2027-04-17T12:30:00Z","finished":false},{"id":33,"deadline":"2027-04-24T12:30:00Z","finished":false},{"id":34,"deadline":"2027-05-01T12:30:00Z","finished":false},{"id":35,"deadline":"2027-05-08T12:30:00Z","finished":false},{"id":36,"deadline":"2027-05-15T12:30:00Z","finished":false},{"id":37,"deadline":"2027-05-23T12:30:00Z","finished":false},{"id":38,"deadline":"2027-05-30T13:30:00Z","finished":false}],"teams":[{"id":2783,"name":"Stotes 🐍’s ⭐️⭐️🏆🏆","manager":"Andy Whitefield","history":[{"gw":1,"pts":49,"total":49},{"gw":2,"pts":24,"total":73},{"gw":3,"pts":61,"total":134},{"gw":4,"pts":51,"total":185},{"gw":5,"pts":48,"total":233},{"gw":6,"pts":44,"total":277}]},{"id":2937,"name":"Crusty Beef Flaps⭐💩","manager":"Addy Field","history":[{"gw":1,"pts":20,"total":20},{"gw":2,"pts":38,"total":58},{"gw":3,"pts":37,"total":95},{"gw":4,"pts":42,"total":137},{"gw":5,"pts":26,"total":163},{"gw":6,"pts":18,"total":181}]},{"id":4058,"name":"Warriors ⭐️💩","manager":"Mike Whitefield","history":[{"gw":1,"pts":80,"total":80},{"gw":2,"pts":31,"total":111},{"gw":3,"pts":38,"total":149},{"gw":4,"pts":57,"total":206},{"gw":5,"pts":39,"total":245},{"gw":6,"pts":40,"total":285}]},{"id":4094,"name":"Depeche’s Dingers 👬","manager":"Dan Peach","history":[{"gw":1,"pts":52,"total":52},{"gw":2,"pts":41,"total":93},{"gw":3,"pts":31,"total":124},{"gw":4,"pts":45,"total":169},{"gw":5,"pts":58,"total":227},{"gw":6,"pts":44,"total":271}]},{"id":4387,"name":"The Mighty D\u0027s 🏆🏆","manager":"Carl Lazenby","history":[{"gw":1,"pts":41,"total":41},{"gw":2,"pts":38,"total":79},{"gw":3,"pts":38,"total":117},{"gw":4,"pts":40,"total":157},{"gw":5,"pts":29,"total":186},{"gw":6,"pts":39,"total":225}]},{"id":4400,"name":"Man On Luke","manager":"Luke Paul","history":[{"gw":1,"pts":20,"total":20},{"gw":2,"pts":43,"total":63},{"gw":3,"pts":37,"total":100},{"gw":4,"pts":33,"total":133},{"gw":5,"pts":57,"total":190},{"gw":6,"pts":25,"total":215}]},{"id":4720,"name":"Rajakhstan","manager":"AJ Carvell","history":[{"gw":1,"pts":37,"total":37},{"gw":2,"pts":49,"total":86},{"gw":3,"pts":23,"total":109},{"gw":4,"pts":32,"total":141},{"gw":5,"pts":44,"total":185},{"gw":6,"pts":32,"total":217}]},{"id":5674,"name":"Team Sky Rocket","manager":"Charlie Rutter","history":[{"gw":1,"pts":33,"total":33},{"gw":2,"pts":25,"total":58},{"gw":3,"pts":41,"total":99},{"gw":4,"pts":27,"total":126},{"gw":5,"pts":21,"total":147},{"gw":6,"pts":33,"total":180}]},{"id":8705,"name":"Fantasy Toon Army","manager":"Bradley Welch","history":[{"gw":1,"pts":36,"total":36},{"gw":2,"pts":57,"total":93},{"gw":3,"pts":31,"total":124},{"gw":4,"pts":46,"total":170},{"gw":5,"pts":55,"total":225},{"gw":6,"pts":40,"total":265}]},{"id":46637,"name":"Doug\u0027s Dreamers 💩👬","manager":"Doug Whitfield","history":[{"gw":1,"pts":40,"total":40},{"gw":2,"pts":36,"total":76},{"gw":3,"pts":29,"total":105},{"gw":4,"pts":39,"total":144},{"gw":5,"pts":61,"total":205},{"gw":6,"pts":55,"total":260}]},{"id":49167,"name":"SMID ⭐️⭐️⭐️🏆🏆🏆","manager":"Dan Smith","history":[{"gw":1,"pts":73,"total":73},{"gw":2,"pts":48,"total":121},{"gw":3,"pts":43,"total":164},{"gw":4,"pts":65,"total":229},{"gw":5,"pts":52,"total":281},{"gw":6,"pts":35,"total":316}]},{"id":78730,"name":"Not So Smug 👬🏿","manager":"George Pugson","history":[{"gw":1,"pts":38,"total":38},{"gw":2,"pts":42,"total":80},{"gw":3,"pts":28,"total":108},{"gw":4,"pts":47,"total":155},{"gw":5,"pts":36,"total":191},{"gw":6,"pts":28,"total":219}]},{"id":204909,"name":"Hods Checkouts 💩","manager":"Sam Hodkinson","history":[{"gw":1,"pts":19,"total":19},{"gw":2,"pts":39,"total":58},{"gw":3,"pts":22,"total":80},{"gw":4,"pts":20,"total":100},{"gw":5,"pts":37,"total":137},{"gw":6,"pts":20,"total":157}]},{"id":331307,"name":"Team Tadpole 🏆💩","manager":"Jonny May","history":[{"gw":1,"pts":22,"total":22},{"gw":2,"pts":37,"total":59},{"gw":3,"pts":36,"total":95},{"gw":4,"pts":32,"total":127},{"gw":5,"pts":25,"total":152},{"gw":6,"pts":50,"total":202}]},{"id":335037,"name":"Browns Boys ⭐️","manager":"Mike Towill","history":[{"gw":1,"pts":30,"total":30},{"gw":2,"pts":23,"total":53},{"gw":3,"pts":40,"total":93},{"gw":4,"pts":22,"total":115},{"gw":5,"pts":24,"total":139},{"gw":6,"pts":27,"total":166}]},{"id":415372,"name":"The Highlanders🏆🏆⭐","manager":"Alex McGown","history":[{"gw":1,"pts":22,"total":22},{"gw":2,"pts":45,"total":67},{"gw":3,"pts":32,"total":99},{"gw":4,"pts":46,"total":145},{"gw":5,"pts":29,"total":174},{"gw":6,"pts":35,"total":209}]}],"players":[{"id":248,"name":"Beto","club":"EVE","pos":"FWD","owner":null,"history":[{"gw":1,"pts":1},{"gw":2,"pts":1},{"gw":3,"pts":0},{"gw":4,"pts":0},{"gw":5,"pts":0},{"gw":6,"pts":0}]},{"id":593,"name":"Promise David","club":"BHA","pos":"FWD","owner":415372,"history":[{"gw":1,"pts":0},{"gw":2,"pts":1},{"gw":3,"pts":0},{"gw":4,"pts":0},{"gw":5,"pts":0},{"gw":6,"pts":0}]}],"sideys":[{"title":"Promise David v Beto","stake":"£50","from":1,"to":38,"note":"Highlanders v Crusty Beef Flaps","sides":[{"backer":"Alex (The Highlanders)","players":[593]},{"backer":"Addy (Crusty Beef Flaps)","players":[248]}]},{"title":"Carl v AJ","stake":"£50","from":1,"to":38,"sides":[{"backer":"Carl","managers":[4387]},{"backer":"AJ","managers":[4720]}]},{"title":"Sam v Alex","stake":"£50","from":1,"to":38,"sides":[{"backer":"Sam","managers":[204909]},{"backer":"Alex","managers":[415372]}]},{"title":"Alex v AJ","stake":"£50","from":1,"to":38,"sides":[{"backer":"Alex","managers":[415372]},{"backer":"AJ","managers":[4720]}]}]};
+
+// Chuckle Trade Trophy. A side is a pair of entry ids, or { winner: [roundIndex, tieIndex] } for a later round.
+// A pair's gameweek score is both teams' points added together. Every round is two legs.
+const CUP = {
+  rounds: [
+    { name: 'Round 1', tie: 'Tie', gws: [6, 7], ties: [
+      [[2937, 4720], [204909, 4387]],
+      [[5674, 415372], [2783, 4400]],
+      [[4058, 331307], [4094, 335037]],
+      [[49167, 46637], [78730, 8705]],
+    ]},
+    { name: 'Semi-finals', tie: 'Semi-final', gws: [8, 9], ties: [
+      [{ winner: [0, 0] }, { winner: [0, 1] }],
+      [{ winner: [0, 2] }, { winner: [0, 3] }],
+    ]},
+    { name: 'Final', tie: 'Final', gws: [10, 11], ties: [
+      [{ winner: [1, 0] }, { winner: [1, 1] }],
+    ]},
+  ],
+};
+
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const EV = Object.fromEntries(DATA.events.map(e => [e.id, e]));
+const TEAMS = DATA.teams.map(t => {
+  const pts = {};
+  t.history.forEach(h => { pts[h.gw] = h.pts; });
+  return { ...t, pts, first: t.manager.split(' ')[0] };
+});
+const BY_ID = Object.fromEntries(TEAMS.map(t => [t.id, t]));
+// Two Dans and two Mikes: add a surname initial where first names clash.
+TEAMS.forEach(t => { if (TEAMS.some(o => o !== t && o.first === t.first)) t.short = `${t.first} ${t.manager.split(' ').pop()[0]}`; });
+TEAMS.forEach(t => { t.first = t.short ?? t.first; });
+const LAST_GW = DATA.currentEvent;
+const PLAYED = DATA.events.filter(e => e.id <= LAST_GW).map(e => e.id);
+const gwState = gw => EV[gw]?.finished ? 'final' : (gw <= LAST_GW ? 'live' : 'upcoming');
+const pts = (id, gw) => gw <= LAST_GW ? (BY_ID[id].pts[gw] ?? null) : null;
+
+const londonParts = iso => {
+  const p = Object.fromEntries(new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', year: 'numeric', month: '2-digit' })
+    .formatToParts(new Date(iso)).map(x => [x.type, x.value]));
+  return `${p.year}-${p.month}`;
+};
+const fmtDate = (iso, opts) => new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', ...opts }).format(new Date(iso));
+const shortDate = iso => fmtDate(iso, { day: 'numeric', month: 'short' });
+
+// Standard competition ranking: equal totals share a position.
+function rank(rows, key) {
+  const sorted = [...rows].sort((a, b) => key(b) - key(a));
+  return sorted.map((r, i) => ({ ...r, pos: sorted.findIndex(x => key(x) === key(r)) + 1 }));
+}
+const names = list => list.map(t => esc(t.manager)).join(' & ');
+const teamCell = t => `<th class="l team" scope="row"><div class="tn">${esc(t.name)}</div><div class="mn">${esc(t.manager)}</div></th>`;
+const statePill = s => s === 'final' ? '' : s === 'live' ? '<span class="pill live">Live</span>' : '<span class="pill soon">To play</span>';
+
+/* ---------- Gameweek scores ---------- */
+function renderGameweeks() {
+  const rows = rank(TEAMS.map(t => ({ t, total: PLAYED.reduce((s, gw) => s + (pts(t.id, gw) ?? 0), 0) })), r => r.total);
+  const best = {}, worst = {};
+  PLAYED.forEach(gw => {
+    const v = TEAMS.map(t => pts(t.id, gw)).filter(x => x != null);
+    best[gw] = Math.max(...v); worst[gw] = Math.min(...v);
+  });
+  const leader = rows[0], second = rows.find(r => r.pos > 1);
+  const lastScores = TEAMS.map(t => ({ t, p: pts(t.id, LAST_GW) }));
+  const lastTop = lastScores.filter(x => x.p === best[LAST_GW]);
+  let high = { p: -1 };
+  TEAMS.forEach(t => PLAYED.forEach(gw => { const p = pts(t.id, gw); if (p > high.p) high = { t, p, gw }; }));
+
+  const head = PLAYED.map(gw => `<th>GW${gw}<small>${shortDate(EV[gw].deadline)}</small></th>`).join('');
+  const body = rows.map(r => `<tr><td class="pos">${r.pos}</td>${teamCell(r.t)}${PLAYED.map(gw => {
+    const p = pts(r.t.id, gw);
+    const cls = p == null ? 'na' : p === best[gw] ? 'hi' : p === worst[gw] ? 'lo' : '';
+    return `<td class="${cls}">${p ?? '–'}</td>`;
+  }).join('')}<td class="tot">${r.total}</td></tr>`).join('');
+
+  document.getElementById('gameweeks').innerHTML = `
+    <div class="tiles">
+      <div class="tile"><div class="k">Top of the league</div><div class="v">${leader.total}</div>
+        <div class="n">${esc(leader.t.manager)}</div><div class="m">${esc(leader.t.name)} · ${leader.total - second.total} clear</div></div>
+      <div class="tile"><div class="k">GW${LAST_GW} top score ${statePill(gwState(LAST_GW))}</div><div class="v">${best[LAST_GW]}</div>
+        <div class="n">${names(lastTop.map(x => x.t))}</div><div class="m">${lastTop.map(x => esc(x.t.name)).join(' · ')}</div></div>
+      <div class="tile"><div class="k">Best single gameweek</div><div class="v">${high.p}</div>
+        <div class="n">${esc(high.t.manager)}</div><div class="m">${esc(high.t.name)} · GW${high.gw}</div></div>
+    </div>
+    <div class="board"><div class="stripe" aria-hidden="true"></div>
+      <div class="board-head"><h3>Gameweek scores</h3><span class="note">GW1–${LAST_GW} · sorted by season total</span></div>
+      <div class="scroll"><table class="grid">
+        <thead><tr><th class="pos">#</th><th class="l team">Team</th>${head}<th>Total</th></tr></thead>
+        <tbody>${body}</tbody></table></div>
+      <div class="legend"><span><i class="sw hi"></i>Highest that gameweek</span><span><i class="sw lo"></i>Lowest that gameweek</span></div>
+    </div>`;
+}
+
+/* ---------- Manager of the Month ---------- */
+const MONTHS = (() => {
+  const m = new Map();
+  DATA.events.forEach(e => {
+    const k = londonParts(e.deadline);
+    if (!m.has(k)) m.set(k, { key: k, gws: [], label: fmtDate(e.deadline, { month: 'long', year: 'numeric' }) });
+    m.get(k).gws.push(e.id);
+  });
+  return [...m.values()].filter(x => x.gws[0] <= LAST_GW).map(x => {
+    const playedGws = x.gws.filter(gw => gw <= LAST_GW);
+    const complete = x.gws.every(gw => gwState(gw) === 'final');
+    const rows = rank(TEAMS.map(t => ({ t, total: playedGws.reduce((s, gw) => s + (pts(t.id, gw) ?? 0), 0) })), r => r.total);
+    const top = rows.filter(r => r.pos === 1);
+    const lowTotal = Math.min(...rows.map(r => r.total));
+    const low = rows.filter(r => r.total === lowTotal);
+    return { ...x, playedGws, complete, rows, top, low };
+  });
+})();
+// Every month's table is on the page (newest first); the summary cards link down to them.
+function renderMotm() {
+  const cards = MONTHS.map(m => `
+    <a class="month" href="#month-${m.key}">
+      <span class="mh"><span class="mt">${esc(m.label)}</span>${m.complete ? '<span class="pill done">Final</span>' : '<span class="pill live">In progress</span>'}</span>
+      <span class="gws">GW${m.gws[0]}${m.gws.length > 1 ? '–' + m.gws[m.gws.length - 1] : ''} · ${m.playedGws.length} of ${m.gws.length} played</span>
+      <span class="row"><span class="who"><span class="lab w">${m.complete ? 'Manager of the Month' : 'Leading'}</span>${names(m.top.map(r => r.t))}</span><b>${m.top[0].total}</b></span>
+      <span class="row"><span class="who"><span class="lab l">Lowest</span>${names(m.low.map(r => r.t))}</span><b>${m.low[0].total}</b></span>
+      <span class="jump">Full table ↓</span>
+    </a>`).join('');
+
+  document.getElementById('motm').innerHTML = `
+    <p class="lede">Points scored in each calendar month, grouped by gameweek deadline (UK time). Equal totals share a place.</p>
+    <div class="months">${cards}</div>
+    ${[...MONTHS].reverse().map(monthTable).join('')}`;
+}
+
+function monthTable(m) {
+  const lowTotal = m.low[0].total;
+  const head = m.gws.map(gw => `<th>GW${gw}<small>${shortDate(EV[gw].deadline)}</small></th>`).join('');
+  const body = m.rows.map(r => {
+    const badge = r.pos === 1 ? `<span class="pill win">${m.complete ? 'MOTM' : 'Leading'}</span>`
+      : r.total === lowTotal ? '<span class="pill low">Lowest</span>' : '';
+    return `<tr><td class="pos">${r.pos}</td>${teamCell(r.t)}${m.gws.map(gw => {
+      const p = pts(r.t.id, gw);
+      return `<td class="${p == null ? 'na' : ''}">${p ?? '–'}</td>`;
+    }).join('')}<td class="tot">${r.total}</td><td class="l">${badge}</td></tr>`;
+  }).join('');
+
+  return `
+    <div class="board" id="month-${m.key}"><div class="stripe" aria-hidden="true"></div>
+      <div class="board-head"><h3>${esc(m.label)}</h3>
+        <span class="note">${m.complete ? 'All gameweeks played' : `${m.playedGws.length} of ${m.gws.length} gameweeks played · standings provisional`}</span></div>
+      <div class="scroll"><table class="grid">
+        <thead><tr><th class="pos">#</th><th class="l team">Team</th>${head}<th>Month</th><th class="l"><span hidden>Award</span></th></tr></thead>
+        <tbody>${body}</tbody></table></div>
+    </div>`;
+}
+
+/* ---------- Chuckle Trade Trophy ---------- */
+const pairScore = (pair, gw) => {
+  const v = pair.map(id => pts(id, gw));
+  return v.some(x => x == null) ? null : v[0] + v[1];
+};
+const pairName = pair => pair.map(id => BY_ID[id].first).join(' & ');
+
+// Resolve rounds in order so a later tie can take the winner of an earlier one.
+const RESULTS = [];
+CUP.rounds.forEach((r, ri) => {
+  RESULTS[ri] = r.ties.map((tie, ti) => {
+    const sides = tie.map(s => Array.isArray(s) ? s : (RESULTS[s.winner[0]][s.winner[1]].winner ?? s));
+    const ready = sides.every(Array.isArray);
+    const legs = r.gws.map(gw => ({ gw, s: gwState(gw), a: ready ? pairScore(sides[0], gw) : null, b: ready ? pairScore(sides[1], gw) : null }));
+    const aggA = legs.reduce((s, l) => s + (l.a ?? 0), 0), aggB = legs.reduce((s, l) => s + (l.b ?? 0), 0);
+    const done = ready && legs.every(l => l.s === 'final');
+    const started = legs.some(l => l.a != null);
+    const win = done && aggA !== aggB ? (aggA > aggB ? 0 : 1) : null;
+    const label = r.ties.length > 1 ? `${r.tie} ${ti + 1}` : r.tie;
+    return { label, sides, ready, legs, aggA, aggB, done, started, win, winner: win == null ? null : sides[win] };
+  });
+});
+const sideTitle = s => Array.isArray(s) ? pairName(s) : `Winner of ${RESULTS[s.winner[0]][s.winner[1]].label}`;
+const sideOptions = s => RESULTS[s.winner[0]][s.winner[1]].sides.map(sideTitle).join(' or ');
+const deadline = gw => fmtDate(EV[gw].deadline, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+
+function renderTie(t, gws, prevGw) {
+  const [A, B] = t.sides;
+  const status = t.done ? (t.win != null ? '<span class="pill done">Complete</span>' : '<span class="pill low">Level</span>')
+    : t.started ? '<span class="pill live">In progress</span>' : '<span class="pill soon">To play</span>';
+  const side = (s, k) => !Array.isArray(s)
+    ? `<div class="side tbc"><div class="tn">${esc(sideTitle(s))}</div><div class="mn">${esc(sideOptions(s))}</div></div>`
+    : `<div class="side ${t.win == null ? '' : (t.win === k ? 'through' : 'out')}">
+      ${s.map(id => `<div class="tm"><span class="tn">${esc(BY_ID[id].name)}</span><span class="mn">${esc(BY_ID[id].manager)}</span></div>`).join('')}
+      ${t.win === k ? '<span><span class="pill win">Through</span></span>' : ''}</div>`;
+  const cell = (pair, gw, v, other) => v == null ? '<td class="na">–</td>'
+    : `<td class="${v > other ? 'hi' : ''}">${v}<span class="bd">${pair.map(id => pts(id, gw)).join(' + ')}</span></td>`;
+  const { aggA, aggB } = t;
+  const lead = !t.started ? '' : aggA === aggB ? 'Level on aggregate' : `${pairName(aggA > aggB ? A : B)} lead by ${Math.abs(aggA - aggB)}`;
+  const toPlay = t.legs.filter(l => l.s !== 'final').map(l => `Leg ${gws.indexOf(l.gw) + 1} is GW${l.gw}, deadline ${deadline(l.gw)}`).join(' · ');
+  const foot = t.win != null ? `${pairName(t.winner)} win ${Math.max(aggA, aggB)}–${Math.min(aggA, aggB)} on aggregate`
+    : t.done ? 'Level on aggregate after both legs. A tie-break is needed.'
+    : !t.ready ? `Line-up confirmed after GW${prevGw}. ${toPlay}`
+    : lead + (lead && toPlay ? ' · ' : '') + toPlay;
+
+  return `<article class="board tie"><div class="stripe" aria-hidden="true"></div>
+    <div class="board-head"><h3>${esc(t.label)}</h3>${status}</div>
+    <div class="sides">${side(A, 0)}<div class="vs">VS</div>${side(B, 1)}</div>
+    <div class="scroll"><table class="grid legs">
+      <thead><tr><th class="l">Leg</th><th class="l">Gameweek</th><th>${esc(sideTitle(A))}</th><th>${esc(sideTitle(B))}</th></tr></thead>
+      <tbody>${t.legs.map((l, n) => `<tr><td class="l">${n === 0 ? 'First leg' : 'Second leg'}</td><td class="l">GW${l.gw} ${statePill(l.s)}</td>${t.ready ? cell(A, l.gw, l.a, l.b) + cell(B, l.gw, l.b, l.a) : '<td class="na">–</td><td class="na">–</td>'}</tr>`).join('')}
+      <tr class="agg"><td class="l" colspan="2">Aggregate</td><td>${t.started ? aggA : '–'}</td><td>${t.started ? aggB : '–'}</td></tr></tbody>
+    </table></div>
+    <div class="tie-foot">${esc(foot)}</div></article>`;
+}
+
+function renderCup() {
+  document.getElementById('cup').innerHTML = `
+    <p class="lede">Sixteen teams were drawn into eight pairs, and each pair plays another pair over two legs. A pair scores both teams' gameweek points added together, and the higher aggregate goes through. The winners of Ties 1 and 2 meet in one semi-final and the winners of Ties 3 and 4 in the other. Drawn 22 Sept 2026, starting GW6.</p>
+    ${CUP.rounds.map((r, ri) => `<h2 class="sec">${esc(r.name)} · GW${r.gws[0]} &amp; GW${r.gws[1]}</h2>
+      <div class="ties${r.ties.length === 1 ? ' one' : ''}">${RESULTS[ri].map(t => renderTie(t, r.gws, ri > 0 ? CUP.rounds[ri - 1].gws[1] : null)).join('')}</div>`).join('')}`;
+}
+
+/* ---------- Copa Del Gayboys ---------- */
+function renderCopa() {
+  const when = gw => EV[gw] ? ` (deadline ${deadline(gw)})` : '';
+  document.getElementById('copa').innerHTML = `
+    <div class="board notice"><div class="stripe" aria-hidden="true"></div>
+      <div class="notice-body">
+        <h3>Copa Del Gayboys</h3>
+        <p class="big">The draw takes place in <b>GW19</b>, and the competition begins in <b>GW20</b>.</p>
+        <p class="m">GW19${esc(when(19))} · GW20${esc(when(20))}</p>
+      </div>
+    </div>`;
+}
+
+/* ---------- Sideys ---------- */
+// Bets come from sideys.json. A side has a backer and either league teams (entry ids) or footballers (player ids).
+const PLAYERS = Object.fromEntries((DATA.players ?? []).map(p => {
+  const byGw = {};
+  p.history.forEach(h => { byGw[h.gw] = (byGw[h.gw] ?? 0) + h.pts; });   // double gameweeks have two rows
+  return [p.id, { ...p, byGw }];
+}));
+const playerPts = (id, gw) => gw <= LAST_GW ? (PLAYERS[id].byGw[gw] ?? 0) : null;
+
+function betSide(s, gws) {
+  const picks = [
+    ...(s.managers ?? []).map(id => ({ name: BY_ID[id].name, sub: BY_ID[id].manager, total: gws.reduce((a, gw) => a + (pts(id, gw) ?? 0), 0) })),
+    ...(s.players ?? []).map(id => {
+      const p = PLAYERS[id];
+      const owner = p.owner && BY_ID[p.owner] ? `owned by ${BY_ID[p.owner].first}` : 'unowned';
+      return { name: p.name, sub: `${p.club} · ${p.pos} · ${owner}`, total: gws.reduce((a, gw) => a + (playerPts(id, gw) ?? 0), 0) };
+    }),
+  ];
+  return { backer: s.backer, picks, total: picks.reduce((a, x) => a + x.total, 0) };
+}
+
+function renderBet(b) {
+  const from = b.from ?? 1, to = b.to ?? 38;
+  const gws = PLAYED.filter(gw => gw >= from && gw <= to);
+  const [A, B] = b.sides.map(s => betSide(s, gws));
+  const settled = gwState(to) === 'final';
+  const started = gws.length > 0;
+  const diff = A.total - B.total;
+  const ahead = diff > 0 ? A : diff < 0 ? B : null;
+  const first = b.sides[0];
+  const kind = first.players ? 'Player v player' : (first.managers ?? []).length > 1 ? 'Pair v pair' : 'Head to head';
+  const range = from === 1 && to === 38 ? 'Whole season' : from === to ? `GW${from}` : `GW${from}–${to}`;
+  const status = settled ? '<span class="pill done">Settled</span>' : started ? '<span class="pill live">Live</span>' : '<span class="pill soon">Not started</span>';
+  const foot = !started ? `Starts GW${from}`
+    : settled ? (ahead ? `${ahead.backer} wins by ${Math.abs(diff)}` : 'Finished level')
+    : (ahead ? `${ahead.backer} leads by ${Math.abs(diff)}` : 'Level') + ` · settles after GW${to}`;
+  const side = s => `<div class="side ${started && s === ahead ? (settled ? 'through' : 'ahead') : ''}">
+      <span class="backer">${esc(s.backer)}</span>
+      ${s.picks.map(p => `<div class="pick"><span><span class="tn">${esc(p.name)}</span><br><span class="mn">${esc(p.sub)}</span></span>${s.picks.length > 1 ? `<span class="pts">${p.total}</span>` : ''}</div>`).join('')}
+      <div class="sum"><span class="mn">${s.picks.length > 1 ? 'Combined' : 'Points'}</span><b>${started ? s.total : '–'}</b></div>
+      ${settled && s === ahead ? '<span><span class="pill win">Winner</span></span>' : ''}</div>`;
+
+  return `<article class="board tie bet"><div class="stripe" aria-hidden="true"></div>
+    <div class="board-head"><h3>${esc(b.title ?? `${A.backer} v ${B.backer}`)}</h3>${status}</div>
+    <div class="sides">${side(A)}<div class="vs">VS</div>${side(B)}</div>
+    <div class="tie-foot">${esc(foot)} · ${esc(kind)} · ${esc(range)}${b.stake ? ' · Stake: ' + esc(b.stake) : ''}${b.note ? ' · ' + esc(b.note) : ''}</div></article>`;
+}
+
+function renderSideys() {
+  const bets = DATA.sideys ?? [];
+  const kinds = `<div class="kinds">
+      <div class="tile"><div class="k">Head to head</div><div class="m">One manager's points against another's, over the whole season or a set of gameweeks.</div></div>
+      <div class="tile"><div class="k">Pair v pair</div><div class="m">Two managers' points combined against another two.</div></div>
+      <div class="tile"><div class="k">Player v player</div><div class="m">One Premier League player's FPL points against another's.</div></div>
+    </div>`;
+  document.getElementById('sideys').innerHTML = `
+    <p class="lede">Side bets between the group. Scores update from the same data as the rest of the page.</p>
+    ${bets.length ? `<div class="ties">${bets.map(renderBet).join('')}</div>` : `
+      <div class="board notice"><div class="stripe" aria-hidden="true"></div><div class="notice-body">
+        <p class="big"><b>No sideys on the books yet.</b></p>
+        <p class="m">To add one, tell Claude who is betting, what on, the stake and which gameweeks it covers.</p>
+      </div></div>`}
+    ${kinds}`;
+}
+
+/* ---------- Shell ---------- */
+// build_slgb.ps1 runs this script once in Node (prerender.js) and saves the output into the file, so every panel
+// is readable even where scripts are blocked. When the script does run in a browser, the panels become tabs.
+const TABS = ['gameweeks', 'motm', 'cup', 'copa', 'sideys'];
+const TITLES = { gameweeks: 'Gameweek scores', motm: 'Manager of the Month', cup: 'Chuckle Trade Trophy', copa: 'Copa Del Gayboys', sideys: 'Sideys' };
+function show(id, jump) {
+  TABS.forEach(t => {
+    document.getElementById(t).hidden = t !== id;
+    document.getElementById('tab-' + t).setAttribute('aria-selected', String(t === id));
+  });
+  const main = document.querySelector('main');
+  if (jump && window.scrollY > main.offsetTop) window.scrollTo(0, main.offsetTop - document.querySelector('nav.tabs').offsetHeight - 8);
+}
+TABS.forEach(t => document.getElementById('tab-' + t).addEventListener('click', e => {
+  e.preventDefault();
+  show(t, true);
+  try { history.replaceState(null, '', '#' + t); } catch (err) {}
+}));
+document.querySelector('nav.tabs').addEventListener('keydown', e => {
+  if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+  const i = TABS.findIndex(t => !document.getElementById(t).hidden);
+  const n = TABS[(i + (e.key === 'ArrowRight' ? 1 : TABS.length - 1)) % TABS.length];
+  show(n); document.getElementById('tab-' + n).focus();
+});
+
+document.getElementById('sub').textContent = `${DATA.leagueName} · Season 2026/27 · ${TEAMS.length} managers · after GW${LAST_GW}`;
+document.getElementById('foot').textContent = `Scores from the FPL Draft API, updated ${fmtDate(DATA.updated, { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}.`;
+renderGameweeks(); renderMotm(); renderCup(); renderCopa(); renderSideys();
+TABS.forEach(t => document.getElementById(t).insertAdjacentHTML('afterbegin', `<h2 class="panel-title">${TITLES[t]}</h2>`));
+document.documentElement.classList.add('js');
+const start = location.hash.slice(1);
+show(TABS.includes(start) ? start : start.startsWith('month-') ? 'motm' : 'gameweeks');
+if (start.startsWith('month-')) document.getElementById(start)?.scrollIntoView();
+</script>
